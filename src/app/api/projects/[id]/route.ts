@@ -7,13 +7,20 @@ import {
 } from "@/services/project.service";
 
 import { ProjectSchema } from "@/schemas/project.schema";
-import { handleApiError } from "@/lib/api-error";
+import { handleApiError, unauthorizedResponse } from "@/lib/api-error";
+import { requireSession } from "@/lib/require-session";
 
 export async function GET(
   request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
   try {
+    const session = await requireSession();
+
+    if (!session) {
+      return unauthorizedResponse();
+    }
+
     const { id } = await context.params;
 
     const project = await getProjectById(id);
@@ -40,6 +47,12 @@ export async function PUT(
   context: { params: Promise<{ id: string }> },
 ) {
   try {
+    const session = await requireSession();
+
+    if (!session) {
+      return unauthorizedResponse();
+    }
+
     const { id } = await context.params;
 
     const body = await request.json();
@@ -63,6 +76,12 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> },
 ) {
   try {
+    const session = await requireSession();
+
+    if (!session) {
+      return unauthorizedResponse();
+    }
+
     const { id } = await context.params;
 
     await deleteProject(id);

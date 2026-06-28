@@ -3,12 +3,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { getProjects, createProject } from "@/services/project.service";
 
 import { ProjectSchema } from "@/schemas/project.schema";
-import { handleApiError } from "@/lib/api-error";
+import { handleApiError, unauthorizedResponse } from "@/lib/api-error";
+import { requireSession } from "@/lib/require-session";
 
 import { ProjectFilters, ProjectSort } from "@/types/project-filter";
 
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireSession();
+
+    if (!session) {
+      return unauthorizedResponse();
+    }
+
     const searchParams = request.nextUrl.searchParams;
 
     const filters: ProjectFilters = {
@@ -27,6 +34,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: Request) {
   try {
+    const session = await requireSession();
+
+    if (!session) {
+      return unauthorizedResponse();
+    }
+
     const body = await request.json();
 
     const result = ProjectSchema.safeParse(body);

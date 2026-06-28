@@ -61,3 +61,14 @@ export function handleApiError(error: unknown) {
     },
   );
 }
+
+export function unauthorizedResponse() {
+  return NextResponse.json(
+    {
+      error: "Unauthorized",
+    },
+    {
+      status: 401,
+    },
+  );
+}
