@@ -1,36 +1,201 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mini SaaS Dashboard
+
+A full-stack project management dashboard built with **Next.js**, **TypeScript**, **Prisma**, **PostgreSQL**, and **Tailwind CSS**.
+
+The application allows users to create, manage, search, filter, update, and delete projects through a responsive dashboard interface.
+
+---
+
+## Features
+
+### Dashboard
+
+- View all projects
+- Search projects by name
+- Filter projects by status
+- Sort projects
+- Dashboard statistics
+- Responsive layout
+
+### Project Management
+
+- Create new projects
+- Edit existing projects
+- Delete projects with confirmation dialog
+- Form validation with Zod
+- Toast notifications for user feedback
+
+### Backend
+
+- RESTful API built with Next.js Route Handlers
+- PostgreSQL database
+- Prisma ORM
+- Server-side filtering and sorting
+
+---
+
+## Tech Stack
+
+### Frontend
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- React Hook Form
+- Zod
+- Sonner
+
+### Backend
+
+- Next.js Route Handlers
+- Prisma ORM
+- PostgreSQL
+
+---
+
+## Project Structure
+
+```text
+src/
+├── app/
+│   ├── api/
+│   └── page.tsx
+│
+├── components/
+│
+├── hooks/
+│   ├── useDebounce.ts
+│   └── useProjects.ts
+│
+├── lib/
+│   ├── api.ts
+│   └── prisma.ts
+│
+├── schemas/
+│
+└── types/
+
+prisma/
+├── schema.prisma
+└── seed.ts
+```
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd <project-folder>
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env` file:
+
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/mini_saas_dashboard"
+```
+
+### 4. Run database migrations
+
+```bash
+npx prisma migrate dev
+```
+
+### 5. Generate the Prisma Client
+
+```bash
+npx prisma generate
+```
+
+### 6. Seed the database
+
+```bash
+npm run seed
+```
+
+### 7. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To inspect the database:
 
-## Learn More
+```bash
+npx prisma studio
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Usage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Once the application is running, you can:
 
-## Deploy on Vercel
+- Create new projects
+- Edit existing projects
+- Delete projects
+- Search projects by name
+- Filter by project status
+- Sort projects
+- View dashboard statistics
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## API
+
+The application exposes REST endpoints under:
+
+```
+/api/projects
+```
+
+Supported operations include:
+
+- GET
+- POST
+- PUT
+- DELETE
+
+Filtering, searching, and sorting are supported through query parameters.
+
+---
+
+## Architecture
+
+The project follows a component-based architecture:
+
+- **UI components** are responsible for rendering.
+- **Custom hooks** (`useProjects`) encapsulate data fetching and CRUD operations.
+- **API utilities** centralize communication with the backend.
+- **Prisma** manages database access.
+
+This separation of concerns keeps the UI focused on presentation while business logic remains reusable and maintainable.
+
+---
+
+## Future Improvements
+
+- Authentication and user accounts
+- Pagination
+- Optimistic UI updates
+- Unit and integration testing
+- Role-based permissions
+- Docker support
