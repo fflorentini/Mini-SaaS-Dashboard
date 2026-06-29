@@ -6,6 +6,15 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { FormField } from "@/components/ui/form-field";
+import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -39,35 +48,52 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm space-y-4 rounded-lg border p-6 shadow"
-      >
-        <h1 className="text-center text-2xl font-bold">Sign In</h1>
+    <main className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-8 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md shadow-xl shadow-black/5">
+        <CardHeader className="space-y-3 pb-6 text-center">
+          <CardTitle className="text-2xl font-bold sm:text-3xl">
+            Welcome back
+          </CardTitle>
 
-        <input
-          className="w-full rounded border p-2"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-        />
+          <CardDescription>Sign in to access your dashboard.</CardDescription>
+        </CardHeader>
 
-        <input
-          className="w-full rounded border p-2"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <FormField label="Email" htmlFor="email">
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                disabled={loading}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </FormField>
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+            <FormField label="Password" htmlFor="password">
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                disabled={loading}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </FormField>
 
-        <Button className="w-full" disabled={loading} type="submit">
-          {loading ? "Signing in..." : "Sign In"}
-        </Button>
-      </form>
+            {error && (
+              <div className="rounded-lg border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                {error}
+              </div>
+            )}
+
+            <Button className="h-11 w-full" disabled={loading} type="submit">
+              {loading ? "Signing in..." : "Sign In"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </main>
   );
 }

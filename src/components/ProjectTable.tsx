@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { StatusBadge } from "./StatusBadge";
+import { Pencil, Trash2, Calendar, User, DollarSign } from "lucide-react";
 
 type Props = {
   projects: Project[];
@@ -41,11 +42,16 @@ export default function ProjectTable({ projects, onEdit, onDelete }: Props) {
 
       <div className="space-y-4 md:hidden">
         {projects.map((project) => (
-          <Card key={project.id}>
+          <Card
+            className="transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+            key={project.id}
+          >
             <CardContent className="space-y-4 pt-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-semibold text-lg">{project.name}</h3>
+                  <h3 className="text-lg font-semibold tracking-tight">
+                    {project.name}
+                  </h3>
 
                   <p className="text-sm text-muted-foreground">
                     {project.assignedMember}
@@ -55,9 +61,9 @@ export default function ProjectTable({ projects, onEdit, onDelete }: Props) {
                 <StatusBadge status={project.status} />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-2 gap-6 rounded-lg bg-muted/30 p-4 text-sm">
                 <div>
-                  <p className="text-muted-foreground">Deadline</p>
+                  <p className="text-muted-foreground">Deadline </p>
 
                   <p>
                     {new Intl.DateTimeFormat("en-US").format(
@@ -100,7 +106,7 @@ export default function ProjectTable({ projects, onEdit, onDelete }: Props) {
 
       <div className="hidden md:block rounded-lg border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-muted/40">
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Status</TableHead>
@@ -115,27 +121,48 @@ export default function ProjectTable({ projects, onEdit, onDelete }: Props) {
             {projects.map((project) => (
               <TableRow
                 key={project.id}
-                className="hover:bg-muted/40 transition-colors"
+                className="transition-colors hover:bg-muted/60"
               >
-                <TableCell className="font-medium">{project.name}</TableCell>
+                <TableCell className="py-5">
+                  <div className="font-semibold tracking-tight">
+                    {project.name}
+                  </div>
+                </TableCell>
 
                 <TableCell>
                   <StatusBadge status={project.status} />
                 </TableCell>
 
-                <TableCell>
-                  {new Intl.DateTimeFormat("en-US").format(
-                    new Date(project.deadline),
-                  )}
+                <TableCell className="py-5">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Calendar className="h-4 w-4" />
+
+                    {new Intl.DateTimeFormat("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    }).format(new Date(project.deadline))}
+                  </div>
                 </TableCell>
 
-                <TableCell>{project.assignedMember}</TableCell>
+                <TableCell className="py-5">
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4 text-muted-foreground" />
 
-                <TableCell className="text-right">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  }).format(project.budget)}
+                    <span>{project.assignedMember}</span>
+                  </div>
+                </TableCell>
+
+                <TableCell className="py-5 text-right">
+                  <div className="flex items-center justify-end gap-1">
+                    <DollarSign className="h-4 w-4 text-emerald-600" />
+
+                    <span className="font-semibold tracking-tight">
+                      {new Intl.NumberFormat("en-US", {
+                        maximumFractionDigits: 0,
+                      }).format(project.budget)}
+                    </span>
+                  </div>
                 </TableCell>
 
                 <TableCell>
@@ -145,6 +172,7 @@ export default function ProjectTable({ projects, onEdit, onDelete }: Props) {
                       variant="outline"
                       onClick={() => onEdit(project)}
                     >
+                      <Pencil className="mr-2 h-4 w-4" />
                       Edit
                     </Button>
 
@@ -153,6 +181,7 @@ export default function ProjectTable({ projects, onEdit, onDelete }: Props) {
                       variant="destructive"
                       onClick={() => onDelete(project.id)}
                     >
+                      <Trash2 className="mr-2 h-4 w-4" />
                       Delete
                     </Button>
                   </div>

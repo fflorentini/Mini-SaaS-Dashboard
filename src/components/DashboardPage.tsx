@@ -18,6 +18,17 @@ import DashboardStats from "@/components/DashboardStats";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useProjects } from "@/hooks/useProjects";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
+import { SectionHeader } from "@/components/ui/section-header";
+import { DataToolbar } from "@/components/ui/data-toolbar";
+import FilterToolbar from "@/components/dashboard/FilterToolbar";
 
 export default function DashboardPage() {
   const [filters, setFilters] = useState<ProjectFilters>({
@@ -65,89 +76,65 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="container mx-auto space-y-6 p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Mini SaaS Dashboard</h1>
+    <main className="container mx-auto max-w-7xl space-y-8 px-6 py-8">
+      <PageHeader
+        title="Mini SaaS Dashboard"
+        description="Manage your projects and monitor their progress."
+        actions={
+          <>
+            <Button
+              className="min-w-36"
+              onClick={() => {
+                setEditingProject(null);
+                setOpen(true);
+              }}
+            >
+              Add Project
+            </Button>
 
-          <p className="mt-1 text-muted-foreground">
-            Manage your projects and monitor their progress.
-          </p>
-        </div>
+            <Button
+              variant="outline"
+              className="min-w-28"
+              onClick={() => signOut({ callbackUrl: "/" })}
+            >
+              Logout
+            </Button>
+          </>
+        }
+      />
 
-        <div className="flex gap-2">
-          <Button
-            onClick={() => {
-              setEditingProject(null);
+      <section className="space-y-4">
+        <DashboardStats projects={projects} />
+      </section>
+
+      <FilterToolbar filters={filters} onFiltersChange={setFilters} />
+
+      <SectionHeader
+        title="Projects"
+        description={`Showing ${projects.length} project${
+          projects.length !== 1 ? "s" : ""
+        }`}
+      />
+
+      <Card>
+        <CardContent className="pt-6">
+          <ProjectTable
+            projects={projects}
+            onEdit={(project) => {
+              setEditingProject(project);
               setOpen(true);
             }}
-          >
-            Add Project
-          </Button>
+            onDelete={(id) => {
+              const project = projects.find((p) => p.id === id);
 
-          <Button
-            variant="outline"
-            onClick={() => signOut({ callbackUrl: "/" })}
-          >
-            Logout
-          </Button>
-        </div>
-      </div>
+              if (!project) return;
 
-      <DashboardStats projects={projects} />
-
-      <div className="flex flex-col gap-4 md:flex-row">
-        <SearchBar
-          value={filters.search}
-          onChange={(value) =>
-            setFilters((current) => ({
-              ...current,
-              search: value,
-            }))
-          }
-        />
-
-        <StatusFilter
-          value={filters.status}
-          onChange={(value) =>
-            setFilters((current) => ({
-              ...current,
-              status: value,
-            }))
-          }
-        />
-
-        <SortProjects
-          value={filters.sort}
-          onChange={(value) =>
-            setFilters((current) => ({
-              ...current,
-              sort: value,
-            }))
-          }
-        />
-      </div>
-
-      <div className="text-sm text-muted-foreground">
-        {projects.length} project
-        {projects.length !== 1 && "s"} found
-      </div>
-
-      <ProjectTable
-        projects={projects}
-        onEdit={(project) => {
-          setEditingProject(project);
-          setOpen(true);
-        }}
-        onDelete={(id) => {
-          const project = projects.find((p) => p.id === id);
-
-          if (!project) return;
-
-          setProjectToDelete(project);
-          setDeleteDialogOpen(true);
-        }}
-      />
+              setProjectToDelete(project);
+              setDeleteDialogOpen(true);
+            }}
+          />
+        </CardContent>
+      </Card>
 
       <ProjectModal
         open={open}

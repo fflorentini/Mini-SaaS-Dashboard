@@ -1,5 +1,7 @@
 "use client";
 
+import { Trash2 } from "lucide-react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,6 +10,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
@@ -39,22 +42,30 @@ export default function ConfirmDialog({
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogMedia className="bg-destructive/10 text-destructive">
+            <Trash2 className="h-5 w-5" />
+          </AlertDialogMedia>
+
+          <AlertDialogTitle className="text-lg">{title}</AlertDialogTitle>
 
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading} className="min-w-24">
+            Cancel
+          </AlertDialogCancel>
 
           <AlertDialogAction
+            variant="destructive"
+            className="min-w-36"
             disabled={loading}
             onClick={async (e) => {
               e.preventDefault();
               await onConfirm();
             }}
           >
-            {loading ? "Deleting..." : "Delete"}
+            {loading ? "Deleting Project..." : "Delete Project"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

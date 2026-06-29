@@ -42,8 +42,11 @@ export function StatusBadge({ status }: Props) {
   const Icon = config.icon;
 
   return (
-    <Badge variant="outline" className={`gap-1 ${config.className}`}>
-      <Icon className="h-3.5 w-3.5" />
+    <Badge
+      variant="outline"
+      className={`gap-1.5 rounded-full px-3 py-1 font-medium transition-colors ${config.className}`}
+    >
+      <Icon className="h-3.5 w-3.5 shrink-0" />
       {config.label}
     </Badge>
   );
