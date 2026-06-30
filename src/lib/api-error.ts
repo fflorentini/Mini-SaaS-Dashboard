@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { Prisma } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export function handleApiError(error: unknown) {
   console.error(error);
@@ -17,7 +17,7 @@ export function handleApiError(error: unknown) {
     );
   }
 
-  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+  if (error instanceof PrismaClientKnownRequestError) {
     switch (error.code) {
       case "P2025":
         return NextResponse.json(
